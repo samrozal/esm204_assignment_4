@@ -116,7 +116,7 @@ ggplot(data=damages_baseline_pulse_df)+
 damages_baseline_pulse_diff_df <- warming %>%
   mutate(baseline_damages = damage_function(warming_baseline))%>%
   mutate(pulse_damages = damage_function(warming_pulse)) %>% 
-  mutate(diff_damages = (warming_pulse-warming_baseline))
+  mutate(diff_damages = (pulse_damages-baseline_damages))
 ```
 
 ```{r}
@@ -128,4 +128,46 @@ ggplot(data=damages_baseline_pulse_diff_df)+
   theme(panel.background = element_rect(fill="aliceblue"))+
   theme(legend.background= element_rect(fill= "azure1"))
 ```
-### Plot 4 - 
+
+### Plot 4 - the difference in damages over time from the pulse per ton of CO2 (you can assume that each ton of the pulse causes the same amount of damage)
+
+```{r}
+#create a new data frame with damages with damages with pulse, without pulse, difference in damages, and differnce in damages per ton Co2
+damages_baseline_pulse_diff_perton_df <- warming %>%
+  mutate(baseline_damages = damage_function(warming_baseline))%>%
+  mutate(pulse_damages = damage_function(warming_pulse)) %>% 
+  mutate(diff_damages = (pulse_damages-baseline_damages)) %>% 
+  mutate(diff_damages_perton = (diff_damages/3500000000000))
+```
+
+```{r}
+ggplot(data=damages_baseline_pulse_diff_perton_df)+
+  geom_line(aes(x=year, y=diff_damages_perton))+
+  labs(title="Differnece in Damages with and without pulse per ton", x="Year", y ="Damages(USD)")+
+  theme_classic()+
+  theme(plot.background = element_rect(fill="azure2")) +
+  theme(panel.background = element_rect(fill="aliceblue"))+
+  theme(legend.background= element_rect(fill= "azure1"))
+```
+
+# Question 3
+3. The SCC is the present discounted value of the stream of future damages caused by one additional ton of CO2. The Obama Administration used a discount rate of 3% to discount damages. Recently, New York State used a discount rate of 2%. Calculate and make a plot of the SCC (y-axis) against the discount rate (x-axis) for a reasonable range of discount rates. Explain the intuition for how the discount rate affects the SCC.
+
+Note: The equation to calculate present value is PV= B/((1+r^t))
+
+- We assume that a reasonable range of discount rates is 1%-10%. This is because _____________.
+
+```{r}
+# Write a function for present value 
+PV <- function(damages_per_ton,discount_rate, year, pulse_year){
+  pv= (damages_per_ton)/ (((1+discount_rate)^year-pulse_year))
+return(pv)
+}
+```
+
+```{r}
+PV(damages_baseline_pulse_diff_perton_df$diff_damages_perton,0.1,2023,2022)
+```
+
+
+
