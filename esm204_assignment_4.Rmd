@@ -169,5 +169,22 @@ return(pv)
 PV(damages_baseline_pulse_diff_perton_df$diff_damages_perton,0.1,2023,2022)
 ```
 
+```{r}
+# Set the pulse year to 2022
+pulse_year <- 2022
+
+discount_rates<- damages_baseline_pulse_diff_perton_df %>% 
+  select(diff_damages_perton, year) %>% # only keep columns with year and damages per ton of CO2
+  mutate(discountrate_1_pv = diff_damages_perton / ((1+0.01)^(year-pulse_year))) %>% 
+  mutate(discountrate_2_pv = diff_damages_perton / ((1+0.02)^(year-pulse_year))) %>% 
+  mutate(discountrate_3_pv = diff_damages_perton / ((1+0.03)^(year-pulse_year))) %>% 
+  mutate(discountrate_4_pv = diff_damages_perton / ((1+0.04)^(year-pulse_year))) %>% 
+  mutate(discountrate_5_pv = diff_damages_perton / ((1+0.05)^(year-pulse_year))) %>% 
+  mutate(discountrate_6_pv = diff_damages_perton / ((1+0.06)^(year-pulse_year))) %>% 
+  mutate(discountrate_7_pv = diff_damages_perton / ((1+0.07)^(year-pulse_year))) %>% 
+  mutate(discountrate_8_pv = diff_damages_perton / ((1+0.08)^(year-pulse_year))) %>% 
+  mutate(discountrate_9_pv = diff_damages_perton / ((1+0.09)^(year-pulse_year))) %>% 
+  mutate(discountrate_10_pv = diff_damages_perton / ((1+0.1)^(year-pulse_year)))
+```
 
 
