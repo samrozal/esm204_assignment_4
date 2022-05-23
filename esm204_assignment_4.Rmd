@@ -174,17 +174,22 @@ PV(damages_baseline_pulse_diff_perton_df$diff_damages_perton,0.1,2023,2022)
 pulse_year <- 2022
 
 discount_rates<- damages_baseline_pulse_diff_perton_df %>% 
-  select(diff_damages_perton, year) %>% # only keep columns with year and damages per ton of CO2
-  mutate(discountrate_1_pv = diff_damages_perton / ((1+0.01)^(year-pulse_year))) %>% 
-  mutate(discountrate_2_pv = diff_damages_perton / ((1+0.02)^(year-pulse_year))) %>% 
-  mutate(discountrate_3_pv = diff_damages_perton / ((1+0.03)^(year-pulse_year))) %>% 
-  mutate(discountrate_4_pv = diff_damages_perton / ((1+0.04)^(year-pulse_year))) %>% 
-  mutate(discountrate_5_pv = diff_damages_perton / ((1+0.05)^(year-pulse_year))) %>% 
-  mutate(discountrate_6_pv = diff_damages_perton / ((1+0.06)^(year-pulse_year))) %>% 
-  mutate(discountrate_7_pv = diff_damages_perton / ((1+0.07)^(year-pulse_year))) %>% 
-  mutate(discountrate_8_pv = diff_damages_perton / ((1+0.08)^(year-pulse_year))) %>% 
-  mutate(discountrate_9_pv = diff_damages_perton / ((1+0.09)^(year-pulse_year))) %>% 
-  mutate(discountrate_10_pv = diff_damages_perton / ((1+0.1)^(year-pulse_year)))
+  mutate(discount_rate_1_percent = diff_damages_perton / ((1.01)^(year-pulse_year))) %>% 
+  mutate(discount_rate_2_percent = diff_damages_perton / ((1.02)^(year-pulse_year))) %>% 
+  mutate(discount_rate_3_percent = diff_damages_perton / ((1.03)^(year-pulse_year))) %>% 
+  mutate(discount_rate_4_percent = diff_damages_perton / ((1.04)^(year-pulse_year))) %>% 
+  mutate(discount_rate_5_percent = diff_damages_perton / ((1.05)^(year-pulse_year))) %>% 
+  mutate(discount_rate_6_percent = diff_damages_perton / ((1.06)^(year-pulse_year))) %>% 
+  mutate(discount_rate_7_percent = diff_damages_perton / ((1.07)^(year-pulse_year))) %>% 
+  mutate(discount_rate_8_percent = diff_damages_perton / ((1.08)^(year-pulse_year))) %>% 
+  mutate(discount_rate_9_percent = diff_damages_perton / ((1.09)^(year-pulse_year))) %>% 
+  mutate(discount_rate_10_percent = diff_damages_perton / ((1.1)^(year-pulse_year))) 
+
+discount_rates_simplified <- discount_rates %>% 
+  select(year,discount_rate_1_percent,discount_rate_2_percent,discount_rate_3_percent,discount_rate_4_percent,discount_rate_5_percent,discount_rate_6_percent,discount_rate_7_percent,discount_rate_8_percent,discount_rate_9_percent,discount_rate_10_percent)
 ```
 
+```{r}
+
+```
 
