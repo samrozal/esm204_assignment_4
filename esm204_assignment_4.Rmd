@@ -5,26 +5,127 @@ date: "5/16/2022"
 output: html_document
 ---
 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(janitor)
+library(here)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r}
+#read in the data 
+warming <- read_csv(here("data","warming.csv")) 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+damages <- read_csv(here("data","damages.csv"))
+```
+# Question 1 
 
-```{r cars}
-summary(cars)
+```{r}
+#create a model for climate change
+climate_change_damages <- lm (damages ~ warming + I(warming^2) - 1, data=damages)
+
+#get the coefficients from the model, so later on we can write a function with the coefficients for predicting stuff later
+summary(climate_change_damages)
+
+#get predicted values 
+damages_predicted <- climate_change_damages$fitted.values
+```
+The equation of the line is damages = -1.06e12(warming)+ 1.941e13(warming^2)
+
+```{r}
+#write a function to display this equation
+
+damage_function <- function(warming)
+  {dam <- climate_change_damages$coefficients[1]* (warming) +
+    climate_change_damages$coefficients[2] * (warming^2)
+  return(dam)}
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+ggplot(data=climate_change_damages, aes(x=warming,y=damages))+
+  geom_line(aes(x=warming,y=damages_predicted))+
+  geom_point(aes(x=warming,y=damages))+
+  labs(x="Warming (Celsius)", y="Damages from Warming(USD)", title="Damages (in USD) from Increased Global Mean Temperture")+
+  theme_classic()+
+  theme(plot.background = element_rect(fill="azure2")) +
+  theme(panel.background = element_rect(fill="aliceblue"))+
+  theme(legend.background= element_rect(fill= "azure1"))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+# Question 2
+Warming < baseline , pulse 
+predict using Question 1 model 
+baseline over years 
+- Step 1 create a new tibble 
+baseline = tibble(warming = warming$warming_baseline)
+predicted_baseline = predict(model from question 1, newdata= baseline)
+
+2. Use warming.csv and your estimated damage function to predict damages in each year under
+the baseline climate and the pulse scenario. Make four plots: (1) damages over time without
+the pulse, (2) damages over time with the pulse, (3) the difference in damages over time that
+arises from the pulse, and (4) the difference in damages over time from the pulse per ton of
+CO2 (you can assume that each ton of the pulse causes the same amount of damage).
+
+### Plot 1 - damages over time without pulse
+```{r}
+#create a new tibble to get the values of predicted baseline
+baseline = tibble(warming = warming$warming_baseline)
+predicted_baseline = predict(climate_change_damages, newdata= baseline)
+```
+
+```{r}
+#use the written function to get the values for the dmage at the baseline 
+damages_baseline_df <- warming %>%
+  mutate(baseline_damages = damage_function(warming_baseline))
+```
+
+```{r}
+#graph it 
+
+ggplot(data=damages_baseline_df, aes(x=year, y=baseline_damages))+
+  geom_line()+
+  labs(title="Baseline Damages", x="Year", y ="Damages (USD)")+
+  theme_classic()+
+  theme(plot.background = element_rect(fill="azure2")) +
+  theme(panel.background = element_rect(fill="aliceblue"))+
+  theme(legend.background= element_rect(fill= "azure1"))
+```
+### Plot  - damages over time with pulse
+```{r}
+#create a new data frame with damages with damages with and without pulse
+damages_baseline_pulse_df <- warming %>%
+  mutate(baseline_damages = damage_function(warming_baseline))%>%
+  mutate(pulse_damages = damage_function(warming_pulse))
+```
+
+```{r}
+ggplot(data=damages_baseline_pulse_df)+
+  geom_line(aes(x=year, y=pulse_damages))+
+  labs(title="Damages wih 35 tons of CO2 pulse", x="Year", y ="Damages (USD)")+
+  theme_classic()+
+  theme(plot.background = element_rect(fill="azure2")) +
+  theme(panel.background = element_rect(fill="aliceblue"))+
+  theme(legend.background= element_rect(fill= "azure1"))
+```
+### Plot 3 -the difference in damages over time that arises from the pulse
+```{r}
+#create a new data frame with damages with damages with pulse, without pulse, and difference in damages
+damages_baseline_pulse_diff_df <- warming %>%
+  mutate(baseline_damages = damage_function(warming_baseline))%>%
+  mutate(pulse_damages = damage_function(warming_pulse)) %>% 
+  mutate(diff_damages = (warming_pulse-warming_baseline))
+```
+
+```{r}
+ggplot(data=damages_baseline_pulse_diff_df)+
+  geom_line(aes(x=year, y=diff_damages))+
+  labs(title="Differnece in Damages with and without pulse", x="Year", y ="Damages(USD)")+
+  theme_classic()+
+  theme(plot.background = element_rect(fill="azure2")) +
+  theme(panel.background = element_rect(fill="aliceblue"))+
+  theme(legend.background= element_rect(fill= "azure1"))
+```
+### Plot 4 - 
