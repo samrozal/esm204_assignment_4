@@ -38,8 +38,8 @@ The equation of the line is damages = -1.06e12(warming)+ 1.941e13(warming^2)
 #write a function to display this equation
 
 damage_function <- function(warming)
-  {dam <- climate_change_damages$coefficients[1]* (warming) +
-    climate_change_damages$coefficients[2] * (warming^2)
+  {dam <- (climate_change_damages$coefficients[1]* (warming)) +
+    (climate_change_damages$coefficients[2] * (warming^2))
   return(dam)}
 ```
 
@@ -190,6 +190,20 @@ discount_rates_simplified <- discount_rates %>%
 ```
 
 ```{r}
+#create a data frame with just the sums of the present values under each of the discount rates
+social_cost_df <- data.frame((present_values <- 
+                                c(sum(discount_rates_simplified$discount_rate_1_percent),
+                              sum(discount_rates_simplified$discount_rate_2_percent),
+                              sum(discount_rates_simplified$discount_rate_3_percent),
+                              sum(discount_rates_simplified$discount_rate_4_percent),
+                              sum(discount_rates_simplified$discount_rate_5_percent),
+                              sum(discount_rates_simplified$discount_rate_6_percent),
+                              sum(discount_rates_simplified$discount_rate_7_percent),
+                              sum(discount_rates_simplified$discount_rate_8_percent),
+                              sum(discount_rates_simplified$discount_rate_9_percent),
+                              sum(discount_rates_simplified$discount_rate_10_percent))))
 
+#create a data frame with 
+                             
 ```
 
