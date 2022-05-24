@@ -45,7 +45,7 @@ damage_function <- function(warming)
 
 ```{r}
 ggplot(data=climate_change_damages, aes(x=warming,y=damages))+
-  geom_point(aes(x=warming,y=damages), shape = 21, color = "black", fill = "grey")+
+  geom_point(aes(x=warming,y=damages), shape = 21, color = "darkgrey", fill = "grey")+
   geom_line(aes(x=warming,y=damages_predicted), size = 1.15, color = "royalblue")+
   labs(x="Warming (Celsius)", y="Damages (USD)", title="Damages from Increased Global Mean Temperature")+
   theme_minimal()+
