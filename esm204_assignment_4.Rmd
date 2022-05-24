@@ -282,3 +282,12 @@ ggplot()+
 
 ```
 
+#Question 5
+Now suppose there are two possible climate policies that can be pursued. Policy A is business as usual and Policy B is to take immediate and strong action on climate change. Use these facts
+
+- If you undertake Policy A there are two possible outcomes. Either warming will occur as in the “baseline” (i.e. “no-pulse”) dataset above (this happens with probability 0.5) or warming each year will be 1.5 times that in the “baseline” dataset (with probability 0.5).
+
+```{r}
+
+```
+
