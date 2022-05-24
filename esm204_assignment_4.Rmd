@@ -285,9 +285,37 @@ ggplot()+
 #Question 5
 Now suppose there are two possible climate policies that can be pursued. Policy A is business as usual and Policy B is to take immediate and strong action on climate change. Use these facts
 
-- If you undertake Policy A there are two possible outcomes. Either warming will occur as in the “baseline” (i.e. “no-pulse”) dataset above (this happens with probability 0.5) or warming each year will be 1.5 times that in the “baseline” dataset (with probability 0.5).
+- If you undertake Policy A there are two possible outcomes. Either warming will occur as in the “baseline” (i.e. “no-pulse”) dataset above (this happens with probability 0.5) or warming each year will be 1.5 times that in the “baseline” dataset (with probability 0.5)
+
+- Under Policy B, warming will continue until 2050 as in the “baseline” dataset, and then
+will stabilize at 1.29 degrees and stay that way forever.
+
+-Society is risk neutral
+
+-Use a discount rate of 2%
+
+- What is the expected present value of damages up to 2100 under Policy A? What is the expected present value of damages up to 2100 under Policy B? Suppose undertaking Policy A costs zero and undertaking Policy B costs X. The total cost of a policy is the implementation cost plus expected damages. Make a plot of total cost of Policy A and total cost of Policy against X. Suppose Congress wants to undertake the policy with the lower total cost. Use your graph to advise Congress
+
+First, we create the data set of damages under a warming scenario that is 1.5 times that of the baseline warming.
 
 ```{r}
+#Calculate the damages under the 1.5 scenario
+warming_damages_1.5 <- warming %>%
+  mutate(damages_1.5 = (damage_function(warming_baseline*1.5))) 
+
+warming_damages_1.5_pv <- warming_damages_1.5 %>% 
+  mutate(pv_damages_1.5 = damages_1.5 / ((1.02)^(year-pulse_year)))
+
+#make a data frame with both the baseline and line present values in it
+warming_damages_policyA <- warming %>%
+  mutate(damages_base = (damage_function(warming_baseline)))%>% 
+  mutate(pv_damages_base = (damages_base) / ((1.02)^(year-pulse_year)))%>% 
+  mutate(damages_1.5 = (damage_function(warming_baseline*1.5))) %>% 
+  mutate(pv_damages_1.5 = (damages_1.5) / ((1.02)^(year-pulse_year)))
+```
+
+```{r}
+#now I need to sum up the presnt values to get the total presnt values 
 
 ```
 
