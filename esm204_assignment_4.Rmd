@@ -45,8 +45,8 @@ damage_function <- function(warming)
 
 ```{r}
 ggplot(data=climate_change_damages, aes(x=warming,y=damages))+
-  geom_line(aes(x=warming,y=damages_predicted), size = 1.15, color = "royalblue")+
   geom_point(aes(x=warming,y=damages), shape = 21, color = "black", fill = "grey")+
+  geom_line(aes(x=warming,y=damages_predicted), size = 1.15, color = "royalblue")+
   labs(x="Warming (Celsius)", y="Damages (USD)", title="Damages from Increased Global Mean Temperature")+
   theme_minimal()+
   theme(plot.background = element_rect(fill="azure2")) +
@@ -137,7 +137,7 @@ damages_baseline_pulse_diff_perton_df <- warming %>%
   mutate(baseline_damages = damage_function(warming_baseline))%>%
   mutate(pulse_damages = damage_function(warming_pulse)) %>% 
   mutate(diff_damages = (pulse_damages-baseline_damages)) %>% 
-  mutate(diff_damages_perton = (diff_damages/3500000000000))
+  mutate(diff_damages_perton = (diff_damages/35000000000))
 ```
 
 ```{r}
@@ -190,30 +190,6 @@ discount_rates_simplified <- discount_rates %>%
 ```
 
 ```{r}
-#create a data frame with just the sums of the present values under each of the discount rates
-social_cost_df <- data.frame((present_values <- 
-                                c(sum(discount_rates_simplified$discount_rate_1_percent),
-                              sum(discount_rates_simplified$discount_rate_2_percent),
-                              sum(discount_rates_simplified$discount_rate_3_percent),
-                              sum(discount_rates_simplified$discount_rate_4_percent),
-                              sum(discount_rates_simplified$discount_rate_5_percent),
-                              sum(discount_rates_simplified$discount_rate_6_percent),
-                              sum(discount_rates_simplified$discount_rate_7_percent),
-                              sum(discount_rates_simplified$discount_rate_8_percent),
-                              sum(discount_rates_simplified$discount_rate_9_percent),
-                              sum(discount_rates_simplified$discount_rate_10_percent))))
-
-#create a data frame with just the dicount rates
-discount_rates <- data.frame((discount_rate <- 
-                                c(0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1)))
-
-#join the data frames for funsies
-
-                             
-```
-
-
-```{r}
 #create a vector with the differnet presnt values
 present_values <- c(sum(discount_rates_simplified$discount_rate_1_percent),
                     sum(discount_rates_simplified$discount_rate_2_percent),
@@ -253,8 +229,56 @@ ggplot(data=scc_and_discount_df, aes(x=discount_rate, y=present_values))+
 
 ```
 
-# Question 4 
+# Question 4
+The National Academies of Sciences, Engineering, and Medicine advised the government in a 2017 report to use the Ramsey Rule when discounting within the SCC calculation:
+
+r = ρ + ηg
+
+Using ρ = 0.001, η = 2, and g = 0.01, what is the SCC? Locate this point on your graph from
+above.
+
 ```{r}
+#Write a function for ramsey rule
+
+ramsey_rule <- function(p,n,g){
+  r <- p + (n*g)
+  return(r)
+}
+```
+
+```{r}
+#find new r value using given values 
+new_r <- ramsey_rule(0.001,2,0.01)
+new_r
+```
+```{r}
+#use the present value stuff we did earlier so that we can find the new present value with the r value found underneath our Ramsey rule 
+ramsey_rule_pv <- damages_baseline_pulse_diff_perton_df %>% 
+  mutate(discount_rate_ramsey = diff_damages_perton / ((1+new_r)^(year-pulse_year)))
+```
+
+```{r}
+# Fine the total present value, by summing up the column of the Ramsey rate
+
+ramsey_total_pv <- sum(ramsey_rule_pv$discount_rate_ramsey)
+
+```
+
+```{r}
+# Now I need to plot where the present value is on the graph. To do this, we need to create a data frame with it on there, so I can graph it
+ramsey_rule_df <- data.frame(new_r,ramsey_total_pv)
+```
+
+```{r}
+#Plot it 
+ggplot()+
+  geom_line(data=scc_and_discount_df, aes(x=discount_rate, y=present_values))+
+  geom_point(data=ramsey_rule_df, aes(x=new_r, y=ramsey_total_pv, color="SCC under Ramsey Rule"))+
+  labs(title = "Social Cost of Carbon and Ramsey Rule", y="Social Cost of Carbon (Present Value)", x= "Discount Rate")+
+  theme_minimal()+
+  theme(plot.background = element_rect(fill="azure2")) +
+  theme(panel.background = element_rect(fill="aliceblue"))+
+  theme(legend.background= element_rect(fill= "azure1"))
 
 ```
 
