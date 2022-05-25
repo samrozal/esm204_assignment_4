@@ -306,11 +306,11 @@ total_pv_1.5_scenraio_a <- (sum(warming_damages_policyA$pv_damages_1.5))
 Given that we know that the probability of each scenarios is 1/2 and that the utility function is linear, to find the expected present value we just need to take the average of the two expected total present values.
 
 ```{r}
-net_present_value_scenarioA <- (0.5*total_pv_base_scenraio_a)+ (0.5*total_pv_1.5_scenraio_a)
+total_net_present_value_scenarioA <- (0.5*total_pv_base_scenraio_a)+ (0.5*total_pv_1.5_scenraio_a)
 
 ```
 
-The present value of the damages up to 2100 is `r net_present_value_scenarioA`
+The present value of the damages up to 2100 is `r total_net_present_value_scenarioA`
 
 Next, we find the net present value of Scenario B:
 
@@ -322,11 +322,24 @@ warming_damages_policyB <- warming %>%
     TRUE ~ warming_baseline)) %>% 
   mutate(damage_policyB_b4_2050 = damage_function(damages_policyB)) %>% 
   mutate(damages_policyB_pv = damage_policyB_b4_2050/((1.02)^(year-pulse_year)))
-
 ```
+
+Given that we know that the probability of this scenario is one and the utility function is linear, the expected present value of scenario b is the the total pv of scenario B we just calculated. 
+
+```{r}
+#find the total present value up to 2100 for policy B
+
+total_pv_scenario_b <- (sum(warming_damages_policyB$damages_policyB_pv))
+
+
+total_net_present_value_scenarioB <-total_pv_scenario_b
+```
+
+The present value of the damages up to 2100 is `r total_net_present_value_scenarioB`
 
 
 ```{r}
+#write as a function in order 
 
 ```
 
