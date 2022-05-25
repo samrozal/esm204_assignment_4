@@ -1,13 +1,13 @@
 ---
 title: "ESM 204 Assignment 4"
-author: "Sam Rozal, Claire Meuter, Deanna Elliot"
+author: "Sam Rozal"
 date: "5/16/2022"
 output: html_document
 ---
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(janitor)
 library(here)
@@ -316,7 +316,7 @@ net_present_value_scenarioA <- (0.5*total_pv_base_scenraio_a)+ (0.5*total_pv_1.5
 ```
 The present value of the damages up to 2100 is `r net_present_value_scenarioA`
 
-Next, we find the net present value of Scenario B
+Next, we find the net present value of Scenario B 
 
 ```{r}
 
