@@ -154,14 +154,9 @@ ggplot(data=damages_baseline_pulse_diff_perton_df)+
 
 Note: The equation to calculate present value is PV= B/((1+r^t))
 
- Explain the intuition for how the discount rate affects the SCC.
-If you lower the discount rate
-social cost of carbon dependent on 
+Discount rate directly affects the SCC. A discount rate being lowered raises the social cost of carbon, because the future is being valued more highly. A discount rate being raised will lower the social cost of carbon, because the future is not being valued as high as before. 
 
-
-
-
-- We assume that a reasonable range of discount rates is 1%-10%. This is because 
+Note: We assume that a reasonable range of discount rates is 1%-10%. This is based off of past policies that have used discount rates in this range, and anything above 10% would be an unreasonably high. 
 
 ```{r}
 # Set the pulse year to 2022
