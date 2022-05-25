@@ -1,13 +1,13 @@
 ---
 title: "ESM 204 Assignment 4"
-author: "Sam Rozal"
+author: "Sam Rozal, Deanna Elliot, Claire Meuter"
 date: "5/16/2022"
 output: html_document
 ---
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 library(tidyverse)
 library(janitor)
 library(here)
