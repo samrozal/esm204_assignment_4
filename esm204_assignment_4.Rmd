@@ -1,8 +1,8 @@
 ---
-title: "ESM 204 Assignment 4"
+title: "Calculating SCC & Policy Choice Under Uncertainty"
 author: "Sam Rozal, Deanna Elliot, Claire Meuter"
 date: "5/16/2022"
-output: 
+output:
   html_document:
     code_folding: hide
 ---
@@ -221,10 +221,6 @@ ggplot(data=scc_and_discount_df, aes(x=discount_rate, y=present_values))+
 ```
 
 # Question 4
-The National Academies of Sciences, Engineering, and Medicine advised the government in a 2017 report to use the Ramsey Rule when discounting within the SCC calculation:
-
-r = ρ + ηg
-Using ρ = 0.001, η = 2, and g = 0.01, what is the SCC? Locate this point on your graph from above.
 
 ```{r}
 #Write a function for ramsey rule
@@ -275,7 +271,7 @@ ggplot()+
 
 ```
 
-**Using ρ = 0.001, η = 2, and g = 0.01, the SCC is , as seen in the graph above.**
+**Using ρ = 0.001, η = 2, and g = 0.01, the SCC is $71.35, as seen in the graph above.**
 
 ## Question 5
 Now suppose there are two possible climate policies that can be pursued. Policy A is business as usual and Policy B is to take immediate and strong action on climate change. Use these facts
@@ -314,21 +310,31 @@ total_pv_base_scenraio_a <- (sum(warming_damages_policyA$pv_damages_base))
 total_pv_1.5_scenraio_a <- (sum(warming_damages_policyA$pv_damages_1.5))
 ```
 
-Given that we know that the probability of each scenarios is 1/2 and that the utility function is linear, to find the expected present value we just need to take the average of the two expected total present values
+Given that we know that the probability of each scenarios is 1/2 and that the utility function is linear, to find the expected present value we just need to take the average of the two expected total present values.
 
 ```{r}
 net_present_value_scenarioA <- (0.5*total_pv_base_scenraio_a)+ (0.5*total_pv_1.5_scenraio_a)
 
 ```
+
 The present value of the damages up to 2100 is `r net_present_value_scenarioA`
 
-Next, we find the net present value of Scenario B 
+Next, we find the net present value of Scenario B:
 
 ```{r}
+warming_damages_policyB <- warming %>%
+  select(year,warming_baseline) %>% 
+  mutate(damages_policyB = case_when(
+    year > 2050 ~ 1.29,
+    TRUE ~ warming_baseline)) %>% 
+  mutate(damage_policyB_b4_2050 = damage_function(damages_policyB)) %>% 
+  mutate(damages_policyB_pv = damage_policyB_b4_2050/((1.02)^(year-pulse_year)))
 
 ```
 
 
+```{r}
 
+```
 
 
