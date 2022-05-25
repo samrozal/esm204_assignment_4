@@ -336,15 +336,12 @@ warming_damages_policyB <- warming %>%
     TRUE ~ warming_baseline)) %>% 
   mutate(damage_policyB_b4_2050 = damage_function(damages_policyB)) %>% 
   mutate(damages_policyB_pv = damage_policyB_b4_2050/((1.02)^(year-pulse_year)))
-  
-```
 
+```
 
 
 ```{r}
 
-
-
-
+```
 
 
