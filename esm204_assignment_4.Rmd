@@ -317,8 +317,19 @@ net_present_value_scenarioA <- (0.5*total_pv_base_scenraio_a)+ (0.5*total_pv_1.5
 The present value of the damages up to 2100 is `r net_present_value_scenarioA`
 
 Next, we find the net present value of Scenario B 
+```{r}
+warming_damages_policyB <- warming %>%
+  select(year,warming_baseline) %>% 
+  mutate(damages_policyB = case_when(
+    year > 2050 ~ 1.29,
+    TRUE ~ warming_baseline)) %>% 
+  mutate(damage_policyB_b4_2050 = damage_function(damages_policyB)) %>% 
+  mutate(damages_policyB_pv = damage_policyB_b4_2050/((1.02)^(year-pulse_year)))
+  
+```
+
+
 
 ```{r}
 
-```
 
