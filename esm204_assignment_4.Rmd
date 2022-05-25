@@ -268,7 +268,7 @@ ggplot()+
 
 ```
 
-**Using ρ = 0.001, η = 2, and g = 0.01, the SCC is , as seen in the graph above.**
+**Using ρ = 0.001, η = 2, and g = 0.01, the SCC is $71.35, as seen in the graph above.**
 
 ## Question 5
 Now suppose there are two possible climate policies that can be pursued. Policy A is business as usual and Policy B is to take immediate and strong action on climate change. Use these facts
