@@ -150,10 +150,18 @@ ggplot(data=damages_baseline_pulse_diff_perton_df)+
   theme(legend.background= element_rect(fill= "azure1"))
 ```
 
+
 # Question 3
 3. The SCC is the present discounted value of the stream of future damages caused by one additional ton of CO2. The Obama Administration used a discount rate of 3% to discount damages. Recently, New York State used a discount rate of 2%. Calculate and make a plot of the SCC (y-axis) against the discount rate (x-axis) for a reasonable range of discount rates. Explain the intuition for how the discount rate affects the SCC.
 
 Note: The equation to calculate present value is PV= B/((1+r^t))
+
+ Explain the intuition for how the discount rate affects the SCC.
+If you lower the discount rate
+social cost of carbon dependent on 
+
+
+
 
 - We assume that a reasonable range of discount rates is 1%-10%. This is because _____________.
 
@@ -178,7 +186,7 @@ discount_rates_simplified <- discount_rates %>%
 ```
 
 ```{r}
-#create a vector with the differnet presnt values
+#create a vector with the different present values
 present_values <- c(sum(discount_rates_simplified$discount_rate_1_percent),
                     sum(discount_rates_simplified$discount_rate_2_percent),
                     sum(discount_rates_simplified$discount_rate_3_percent),
@@ -190,16 +198,16 @@ present_values <- c(sum(discount_rates_simplified$discount_rate_1_percent),
                     sum(discount_rates_simplified$discount_rate_9_percent),
                     sum(discount_rates_simplified$discount_rate_10_percent))
 
-#make it inti a data frame
+#make it into a data frame
 social_cost_df <- data.frame(present_values)
 
-#create a vector of the diffenrt discount rates
+#create a vector of the different discount rates
 discount_rate <- c(0.01,0.02,0.03,0.04,0.05,0.06,0.07,0.08,0.09,0.1)
 
 #make it into a data frame
 discount_rate_df <- data.frame(discount_rate) 
 
-#make a data frame with both discont rates and present values
+#make a data frame with both discount rates and present values
 scc_and_discount_df <- data.frame(present_values,discount_rate)
 
 ```
@@ -321,4 +329,8 @@ Next, we find the net present value of Scenario B
 ```{r}
 
 ```
+
+
+
+
 
