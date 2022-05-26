@@ -374,10 +374,21 @@ policy_a_test <- map(policy_a_x,polA) %>% unlist()
 policy_a_data_frame <- tibble(policy_a_x=policy_a_x, polA=polA)
 ```
 
+```{r}
+polB <- policyB(x)
+
+policy_b_x = seq(0,8e+15, length.out=100)
+
+policy_B_test <- map(policy_b_x,polA) %>% unlist()
+
+policy_b_data_frame <- tibble(policy_b_x=policy_b_x, polB=polB)
+```
+
 
 ```{r}
 ggplot()+
   geom_line(data=policy_a_data_frame, aes(x=policy_a_x, y=polA, colour = "Policy A"))+
+  geom_line(data=policy_b_data_frame, aes(x=policy_b_x, y=polB, colour = "Policy B"))+
   stat_function(fun=policyB_implementcosts, mapping = aes(colour= "Policy B with implementation costs"))+
   labs(x="Policy Implemnetation Costs", y="Total Costs", title="Costs for Policy A and Policy B")
 ```
