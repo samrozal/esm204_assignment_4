@@ -356,6 +356,11 @@ return(policy_b)}
 policyB_implementcosts <- function(x){policy_b_implement = total_net_present_value_scenarioB + x
 return(policy_b_implement)}
 
+policyA_fun <- function(x){total_net_present_value_scenarioA}
+
+policyB_implementcosts_fun <- function(x){total_net_present_value_scenarioB}
+
+
 ```
 
 
@@ -380,7 +385,7 @@ ggplot()+
 ```{r}
 #Find the intersection of the two points
 
-intersection <- function(x){policyB_implementcosts(x)- policyA }
+intersection <- function(x){as.numeric(policyB_implementcosts_fun(x))- as.numeric(policyA_fun)}
 
 intersect_pt <- uniroot(intersection, c(0,5e+15))$root
 ```
