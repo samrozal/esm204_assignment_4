@@ -338,7 +338,6 @@ Given that we know that the probability of this scenario is one and the utility 
 
 total_pv_scenario_b <- (sum(warming_damages_policyB$damages_policyB_pv))
 
-
 total_net_present_value_scenarioB <-total_pv_scenario_b
 ```
 
@@ -354,21 +353,16 @@ return(policy_a)}
 policyB <- function(x){policy_b=total_net_present_value_scenarioB
 return(policy_b)}
 
-policyB_implementcosts <- function(x){policy_b_implement = total_net_present_value_scenarioB+x
+policyB_implementcosts <- function(x){policy_b_implement = total_net_present_value_scenarioB + x
 return(policy_b_implement)}
 
-```
-
-```{r}
-policyA <- function(x){policy_a = total_net_present_value_scenarioA
-return(policy_a)}
 ```
 
 
 ```{r}
 polA <- policyA(x)
 
-policy_a_x = seq(0,50, length.out=100)
+policy_a_x = seq(0,8e+15, length.out=100)
 
 policy_a_test <- map(policy_a_x,polA) %>% unlist()
 
@@ -377,18 +371,17 @@ policy_a_data_frame <- tibble(policy_a_x=policy_a_x, polA=polA)
 
 
 ```{r}
-polB <- policyB(x)
-
-policy_b_x = seq(0,50, length.out=100)
-
-policy_b_test <- map(policy_b_x,polB) %>% unlist()
-
-policy_b_data_frame <- tibble(policy_b_x=policy_b_x, polB=polB)
+ggplot()+
+  geom_line(data=policy_a_data_frame, aes(x=policy_a_x, y=polA, colour = "Policy A"))+
+  stat_function(fun=policyB_implementcosts, mapping = aes(colour= "Policy B with implementation costs"))+
+  labs(x="Policy Implemnetation Costs", y="Total Costs", title="Costs for Policy A and Policy B")
 ```
-
 
 ```{r}
+#Find the intersection of the two points
 
+intersection <- function(x){policyB_implementcosts(x)- policyA }
+
+intersect_pt <- uniroot(intersection, c(0,5e+15))$root
 ```
-
 
