@@ -24,6 +24,7 @@ damages <- read_csv(here("data","damages.csv"))
 ```
 
 ## Question 1 
+Using damages.csv, estimate a quadratic damage function relating the dollar value of damages to the change in global mean temperature. Estimate a model with a zero intercept because damages by construction must equal zero when there is no climate change. Plot your estimated damage function, overlaid with a scatterplot of the underlying data.
 
 ```{r}
 #create a model for climate change
@@ -61,6 +62,7 @@ ggplot(data=climate_change_damages, aes(x=warming,y=damages))+
 ```
 
 ## Question 2
+Use warming.csv and your estimated damage function to predict damages in each year under the baseline climate and the pulse scenario. Make four plots: (1) damages over time without the pulse, (2) damages over time with the pulse, (3) the difference in damages over time that arises from the pulse, and (4) the difference in damages over time from the pulse per ton of CO2 (you can assume that each ton of the pulse causes the same amount of damage).
 
 ```{r}
 #create a new tibble to get the values of predicted baseline
@@ -157,6 +159,8 @@ ggplot(data=damages_baseline_pulse_diff_perton_df)+
 **Figure 4.**  Per ton differences in damages between the baseline co2 emissions and the co2 emissions with a pulse
 
 # Question 3
+The SCC is the present discounted value of the stream of future damages caused by one
+additional ton of CO2. The Obama Administration used a discount rate of 3% to discount damages. Recently, New York State used a discount rate of 2%. Calculate and make a plot of the SCC (y-axis) against the discount rate (x-axis) for a reasonable range of discount rates. Explain the intuition for how the discount rate affects the SCC.
 
 ```{r}
 # Set the pulse year to 2022
@@ -226,6 +230,7 @@ ggplot(data=scc_and_discount_df, aes(x=discount_rate, y=present_values))+
 **The social cost of carbon pollution estimate decreases as the discount rate increases because a higher discount rate means a lower expected rate of return on the investment in present-dollars. This implies that people care less about future generations than they do about the present; if future climate damages are discounted at a high rate, we would be placing less value on avoiding those damages today.**
 
 # Question 4
+The National Academies of Sciences, Engineering, and Medicine advised the government in a 2017 report to use the Ramsey Rule when discounting within the SCC calculation: r = ρ + ηg Using ρ = 0.001, η = 2, and g = 0.01, what is the SCC? Locate this point on your graph from above.
 
 ```{r}
 #Write a function for ramsey rule
@@ -277,42 +282,47 @@ ggplot()+
 
 **Figure 6.** Predicted various social costs of carbons at different discount rates. The large red dot represents the calculated discount rate and SCC under the Ramsey Rule. 
 
-**Using the Ramsey Rule with ρ = 0.001, η = 2, and g = 0.01, the SCC is $71.35,and the sicount rate is approximately 2.1% as seen in the graph above.**
+**Using the Ramsey Rule with ρ = 0.001, η = 2, and g = 0.01, the SCC is $71.35,and the discount rate is approximately 2.1% as seen in the graph above.**
 
 ## Question 5
 
+. Now suppose there are two possible climate policies that can be pursued. Policy A is business
+as usual and Policy B is to take immediate and strong action on climate change. Use these facts
+• If you undertake Policy A there are two possible outcomes. Either warming will occur as in the “baseline” (i.e. “no-pulse”) dataset above (this happens with probability 0.5) or warming each year will be 1.5 times that in the “baseline” dataset (with probability 0.5).
+• Under Policy B, warming will continue until 2050 as in the “baseline” dataset, and then will stabilize at 1.29 degrees and stay that way forever.
+• Society is risk neutral
+• Use a discount rate of 2%
+What is the expected present value of damages up to 2100 under Policy A? What is the expected present value of damages up to 2100 under Policy B? Suppose undertaking Policy A costs zero and undertaking Policy B costs X. The total cost of a policy is the implementation cost plus expected damages. Make a plot of total cost of Policy A and total cost of Policy B against X. Suppose Congress wants to undertake the policy with the lower total cost. Use your graph to advise Congress.
+
 First, we create the data set of damages under a warming scenario that is 1.5 times that of the baseline warming.
 
+
 ```{r}
-#Calculate the damages under the 1.5 scenario
-warming_damages_1.5 <- warming %>%
-  mutate(damages_1.5 = (damage_function(warming_baseline*1.5))) 
-
-warming_damages_1.5_pv <- warming_damages_1.5 %>% 
-  mutate(pv_damages_1.5 = damages_1.5 / ((1.02)^(year-pulse_year)))
-
-#make a data frame with both the baseline and line present values in it
-warming_damages_policyA <- warming %>%
-  mutate(damages_base = (damage_function(warming_baseline)))%>% 
-  mutate(pv_damages_base = (damages_base) / ((1.02)^(year-pulse_year)))%>% 
-  mutate(damages_1.5 = (damage_function(warming_baseline*1.5))) %>% 
-  mutate(pv_damages_1.5 = (damages_1.5) / ((1.02)^(year-pulse_year)))
+# Make a new data series for policy A 
+# Set given discount rate of 2%
+discountrate_policy <- 0.02
+warming_damages_policyA <- warming %>% 
+  select(year, warming_baseline, warming_pulse) %>% 
+  mutate(warming_high_policyA = warming_baseline * 1.5) %>% 
+  mutate(damages_high_policyA = damage_function(warming_high_policyA)) %>% 
+  mutate(warming_damages_pv = warming_pulse / ((1+discountrate_policy)^(year-pulse_year))) %>% 
+  mutate(warming_damages_1.5_pv = damages_high_policyA / ((1+discountrate_policy)^(year-pulse_year)))
 ```
 
 ```{r}
-#now I need to sum up the present values to get the total present values for each of the scenarios
-total_pv_base_scenraio_a <- (sum(warming_damages_policyA$pv_damages_base))
-total_pv_1.5_scenraio_a <- (sum(warming_damages_policyA$pv_damages_1.5))
+
+baseline_policyA_sum <- c(sum(warming_damages_policyA$warming_damages_pv))
+baselinex1.5_policyA_sum <- c(sum(warming_damages_policyA$warming_damages_1.5_pv))
 ```
+
 
 Given that we know that the probability of each outcome in Scenario A is 0.5 and that the utility function is linear, to find the expected present value we just need to take the average of the two expected total present values.
 
 ```{r}
-total_net_present_value_scenarioA <- (0.5*total_pv_base_scenraio_a)+ (0.5*total_pv_1.5_scenraio_a)
-
+total_net_present_value_scenarioA <- (0.5*baseline_policyA_sum) + (0.5*baselinex1.5_policyA_sum)
 ```
 
-**The total present value of the damages in Scenario A up to 2100 is $3.02e15.**
+**The total present value of the damages in Scenario A up to 2100 is $ $2.099562e15.**
 
 Next, we find the net present value of Scenario B:
 
@@ -401,10 +411,11 @@ intersection <- function(x){(policyB_implementcosts_fun)(x)- total_net_present_v
 intersect_pt <- uniroot(intersection, c(0,5e+15))$root
 ```
 
-**Being risk neutral, if the cost of implementing Policy B are below $2.24e15 then Policy B should be chosen. If implementation costs are above $2.24e15, then Policy A should be chosen.** 
+**Being risk neutral, if the cost of implementing Policy B are below $1.312891e15 then Policy B should be chosen. If implementation costs are above $1.312891e15, then Policy A should be chosen.** 
 
 
 ## Question 6 
+Now suppose that society is risk averse. How do you think this would change your advice to Congress?
 
 **If society is risk adverse, our advice to Congress will likely change. Switching from a risk neutral to a risk adverse society, means that we are more likely to choose a policy with a more sure or certain outcome. Policy B has a more certain outcome and Policy A has more uncertain outcome (because there is a gamble between scenarios in Policy A). Therefore in a risk adverse we are more likely to choose Policy B at a lower "tipping point" or implementation cost (compared to a risk neutral society) ** 
 
