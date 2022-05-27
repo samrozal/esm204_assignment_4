@@ -386,7 +386,7 @@ intersection <- function(x){(policyB_implementcosts_fun)(x)- total_net_present_v
 intersect_pt <- uniroot(intersection, c(0,5e+15))$root
 ```
 
-**Being risk neutral, if the cost of implementing Policy B are below $2.24e15--which they are--then Policy B should be chosen.**
+**Being risk neutral, if the cost of implementing Policy B are below $2.24e15--which they are--then Policy B should be chosen. If implementation costs are above $2.24e15, then Policy A should be chosen.** 
 
 
 ## Question 6 
