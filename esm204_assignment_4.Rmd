@@ -402,6 +402,10 @@ intersect_pt <- uniroot(intersection, c(0,5e+15))$root
 intersect_pt
 ```
 
+Being risk neutral, if the cost of implementing Policy B are below $`r round(intersect_pt,2)`, then policy B should be chosen. 
+
 
 # Number 6 
+If society is risk adverse, congress will be more likely to enact Policy B. 
 
+Because policy B is less expensive to implement and and has a lower risk, a risk adverse society would choose policy B. Policy B implies lower future damages than policy A.  
