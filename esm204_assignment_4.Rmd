@@ -299,7 +299,7 @@ total_net_present_value_scenarioA <- (0.5*total_pv_base_scenraio_a)+ (0.5*total_
 
 ```
 
-**The present value of the damages in Scenario A up to 2100 is $3.02e15.**
+**The total present value of the damages in Scenario A up to 2100 is $3.02e15.**
 
 Next, we find the net present value of Scenario B:
 
@@ -323,7 +323,7 @@ total_pv_scenario_b <- (sum(warming_damages_policyB$damages_policyB_pv))
 total_net_present_value_scenarioB <-total_pv_scenario_b
 ```
 
-**The present value of the damages in Scenario B up to 2100 is $7.87e14.**
+**The total present value of the damages in Scenario B up to 2100 is $7.87e14.**
 
 
 ```{r}
